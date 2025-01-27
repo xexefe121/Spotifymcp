@@ -14,6 +14,7 @@ import { ArtistsHandler } from './handlers/artists.js';
 import { AlbumsHandler } from './handlers/albums.js';
 import { TracksHandler } from './handlers/tracks.js';
 import { AudiobooksHandler } from './handlers/audiobooks.js';
+import { PlaylistsHandler } from './handlers/playlists.js';
 
 import {
   ArtistArgs,
@@ -34,6 +35,7 @@ import {
   SearchArgs,
 } from './types/tracks.js';
 import { AudiobookArgs, MultipleAudiobooksArgs, AudiobookChaptersArgs } from './types/audiobooks.js';
+import { PlaylistArgs, PlaylistTracksArgs, PlaylistItemsArgs, ModifyPlaylistArgs } from './types/playlists.js';
 
 class SpotifyServer {
   private validateArgs<T>(args: Record<string, unknown> | undefined, requiredFields: string[]): T {
@@ -63,6 +65,7 @@ class SpotifyServer {
   private albumsHandler: AlbumsHandler;
   private tracksHandler: TracksHandler;
   private audiobooksHandler: AudiobooksHandler;
+  private playlistsHandler: PlaylistsHandler;
 
   constructor() {
     this.server = new Server(
@@ -83,6 +86,7 @@ class SpotifyServer {
     this.albumsHandler = new AlbumsHandler(this.api);
     this.tracksHandler = new TracksHandler(this.api);
     this.audiobooksHandler = new AudiobooksHandler(this.api);
+    this.playlistsHandler = new PlaylistsHandler(this.api);
 
     this.setupToolHandlers();
     
@@ -432,6 +436,120 @@ class SpotifyServer {
             },
             required: ['id']
           },
+        },
+        {
+          name: 'get_playlist',
+          description: 'Get a playlist owned by a Spotify user',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+                description: 'The Spotify ID or URI of the playlist'
+              },
+              market: {
+                type: 'string',
+                description: 'Optional. An ISO 3166-1 alpha-2 country code'
+              }
+            },
+            required: ['id']
+          },
+        },
+        {
+          name: 'get_playlist_tracks',
+          description: 'Get full details of the tracks of a playlist',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+                description: 'The Spotify ID or URI of the playlist'
+              },
+              market: {
+                type: 'string',
+                description: 'Optional. An ISO 3166-1 alpha-2 country code'
+              },
+              fields: {
+                type: 'string',
+                description: 'Optional. Filters for the query'
+              },
+              limit: {
+                type: 'number',
+                description: 'Optional. Maximum number of tracks to return (1-100)',
+                minimum: 1,
+                maximum: 100
+              },
+              offset: {
+                type: 'number',
+                description: 'Optional. Index of the first track to return',
+                minimum: 0
+              }
+            },
+            required: ['id']
+          },
+        },
+        {
+          name: 'get_playlist_items',
+          description: 'Get full details of the items of a playlist',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+                description: 'The Spotify ID or URI of the playlist'
+              },
+              market: {
+                type: 'string',
+                description: 'Optional. An ISO 3166-1 alpha-2 country code'
+              },
+              fields: {
+                type: 'string',
+                description: 'Optional. Filters for the query'
+              },
+              limit: {
+                type: 'number',
+                description: 'Optional. Maximum number of items to return (1-100)',
+                minimum: 1,
+                maximum: 100
+              },
+              offset: {
+                type: 'number',
+                description: 'Optional. Index of the first item to return',
+                minimum: 0
+              }
+            },
+            required: ['id']
+          },
+        },
+        {
+          name: 'modify_playlist',
+          description: 'Change a playlist\'s name and public/private state',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+                description: 'The Spotify ID or URI of the playlist'
+              },
+              name: {
+                type: 'string',
+                description: 'Optional. New name for the playlist'
+              },
+              public: {
+                type: 'boolean',
+                description: 'Optional. If true the playlist will be public'
+              },
+              collaborative: {
+                type: 'boolean',
+                description: 'Optional. If true, the playlist will become collaborative'
+              },
+              description: {
+                type: 'string',
+                description: 'Optional. New description for the playlist'
+              }
+            },
+            required: ['id']
+          },
         }
       ],
     }));
@@ -568,6 +686,38 @@ class SpotifyServer {
           case 'get_audiobook_chapters': {
             const args = this.validateArgs<AudiobookChaptersArgs>(request.params.arguments, ['id']);
             const result = await this.audiobooksHandler.getAudiobookChapters(args);
+            return {
+              content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+            };
+          }
+
+          case 'get_playlist': {
+            const args = this.validateArgs<PlaylistArgs>(request.params.arguments, ['id']);
+            const result = await this.playlistsHandler.getPlaylist(args);
+            return {
+              content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+            };
+          }
+
+          case 'get_playlist_tracks': {
+            const args = this.validateArgs<PlaylistTracksArgs>(request.params.arguments, ['id']);
+            const result = await this.playlistsHandler.getPlaylistTracks(args);
+            return {
+              content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+            };
+          }
+
+          case 'get_playlist_items': {
+            const args = this.validateArgs<PlaylistItemsArgs>(request.params.arguments, ['id']);
+            const result = await this.playlistsHandler.getPlaylistItems(args);
+            return {
+              content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+            };
+          }
+
+          case 'modify_playlist': {
+            const args = this.validateArgs<ModifyPlaylistArgs>(request.params.arguments, ['id']);
+            const result = await this.playlistsHandler.modifyPlaylist(args);
             return {
               content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
             };
