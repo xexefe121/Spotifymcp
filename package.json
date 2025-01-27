@@ -1,8 +1,7 @@
 {
-  "name": "mcp-spotify",
+  "name": "@modelcontextprotocol/server-spotify",
   "version": "0.1.0",
-  "description": "Spotify Web API",
-  "private": true,
+  "description": "Spotify Web API MCP server for accessing music, artists, albums, and recommendations",
   "type": "module",
   "bin": {
     "mcp-spotify": "./build/index.js"
@@ -23,5 +22,21 @@
   "devDependencies": {
     "@types/node": "^20.11.24",
     "typescript": "^5.3.3"
+  },
+  "keywords": [
+    "mcp",
+    "spotify",
+    "music",
+    "api",
+    "modelcontextprotocol"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/superseoworld/mcp-spotify.git"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

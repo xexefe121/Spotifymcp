@@ -2,6 +2,39 @@
 
 A Model Context Protocol (MCP) server that provides access to the Spotify Web API. This server enables interaction with Spotify's music catalog, including searching for tracks, albums, and artists, as well as accessing artist-specific information like top tracks and related artists.
 
+## Installation
+
+```bash
+npx -y @modelcontextprotocol/server-spotify
+```
+
+## Configuration
+
+Add to your MCP settings file (e.g., `claude_desktop_config.json` or `cline_mcp_settings.json`):
+
+```json
+{
+  "mcpServers": {
+    "spotify": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-spotify"],
+      "env": {
+        "SPOTIFY_CLIENT_ID": "your_client_id",
+        "SPOTIFY_CLIENT_SECRET": "your_client_secret"
+      },
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
+```
+
+You'll need to provide your Spotify API credentials:
+1. Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
+2. Create a new application
+3. Get your Client ID and Client Secret
+4. Add them to the configuration as shown above
+
 ## Features
 
 - Search for tracks, albums, artists, and playlists
@@ -11,24 +44,6 @@ A Model Context Protocol (MCP) server that provides access to the Spotify Web AP
 - Get audiobook information with market-specific content
 - Support for both Spotify IDs and URIs
 - Automatic token management with client credentials flow
-
-## Setup
-
-1. Install dependencies:
-```bash
-npm install
-```
-
-2. Set environment variables:
-```bash
-SPOTIFY_CLIENT_ID=your_client_id
-SPOTIFY_CLIENT_SECRET=your_client_secret
-```
-
-3. Build the server:
-```bash
-npm run build
-```
 
 ## Available Tools
 
@@ -44,8 +59,7 @@ npm run build
 - `get_new_releases`: Get new album releases
 - `get_recommendations`: Get track recommendations
 - `get_audiobook`: Get audiobook information with optional market parameter
-- And more...
 
 ## License
 
-Private repository. All rights reserved.
+MIT License
