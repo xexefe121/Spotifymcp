@@ -21,3 +21,9 @@ export interface ModifyPlaylistArgs {
   collaborative?: boolean;
   description?: string;
 }
+
+export interface AddTracksToPlaylistArgs {
+  id: string;
+  uris: string[];
+  position?: number;
+}

@@ -35,7 +35,7 @@ import {
   SearchArgs,
 } from './types/tracks.js';
 import { AudiobookArgs, MultipleAudiobooksArgs, AudiobookChaptersArgs } from './types/audiobooks.js';
-import { PlaylistArgs, PlaylistTracksArgs, PlaylistItemsArgs, ModifyPlaylistArgs } from './types/playlists.js';
+import { PlaylistArgs, PlaylistTracksArgs, PlaylistItemsArgs, ModifyPlaylistArgs, AddTracksToPlaylistArgs } from './types/playlists.js';
 
 class SpotifyServer {
   private validateArgs<T>(args: Record<string, unknown> | undefined, requiredFields: string[]): T {
@@ -71,7 +71,7 @@ class SpotifyServer {
     this.server = new Server(
       {
         name: 'mcp-spotify',
-        version: '0.4.1',
+        version: '0.4.2',
       },
       {
         capabilities: {
@@ -550,6 +550,30 @@ class SpotifyServer {
             },
             required: ['id']
           },
+        },
+        {
+          name: 'add_tracks_to_playlist',
+          description: 'Add one or more tracks to a playlist',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+                description: 'The Spotify ID or URI of the playlist'
+              },
+              uris: {
+                type: 'array',
+                items: { type: 'string' },
+                description: 'Array of Spotify track URIs to add'
+              },
+              position: {
+                type: 'number',
+                description: 'Optional. The position to insert the tracks (zero-based)',
+                minimum: 0
+              }
+            },
+            required: ['id', 'uris']
+          },
         }
       ],
     }));
@@ -718,6 +742,14 @@ class SpotifyServer {
           case 'modify_playlist': {
             const args = this.validateArgs<ModifyPlaylistArgs>(request.params.arguments, ['id']);
             const result = await this.playlistsHandler.modifyPlaylist(args);
+            return {
+              content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+            };
+          }
+
+          case 'add_tracks_to_playlist': {
+            const args = this.validateArgs<AddTracksToPlaylistArgs>(request.params.arguments, ['id', 'uris']);
+            const result = await this.playlistsHandler.addTracksToPlaylist(args);
             return {
               content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
             };

@@ -1,5 +1,5 @@
 import { SpotifyApi } from '../utils/api.js';
-import { PlaylistArgs, PlaylistTracksArgs, PlaylistItemsArgs, ModifyPlaylistArgs } from '../types/playlists.js';
+import { PlaylistArgs, PlaylistTracksArgs, PlaylistItemsArgs, ModifyPlaylistArgs, AddTracksToPlaylistArgs } from '../types/playlists.js';
 import { McpError, ErrorCode } from '@modelcontextprotocol/sdk/types.js';
 
 export class PlaylistsHandler {
@@ -65,6 +65,22 @@ export class PlaylistsHandler {
     return this.api.makeRequest(
       `/playlists/${playlistId}`,
       'PUT',
+      data
+    );
+  }
+
+  async addTracksToPlaylist(args: AddTracksToPlaylistArgs) {
+    const playlistId = this.extractPlaylistId(args.id);
+    const { uris, position } = args;
+
+    const data = {
+      uris,
+      ...(position !== undefined && { position })
+    };
+
+    return this.api.makeRequest(
+      `/playlists/${playlistId}/tracks`,
+      'POST',
       data
     );
   }
