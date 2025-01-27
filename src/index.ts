@@ -754,7 +754,7 @@ class SpotifyServer {
             // Extract ID from URI if provided
             const artistId = id.startsWith('spotify:artist:') ? id.split(':')[2] : id;
 
-            const relatedArtists = await this.makeApiRequest(`/artists/${artistId}/related-artists`);
+            const relatedArtists = await this.makeApiRequest(`/artists/${artistId}/related-artists/`);
             return {
               content: [{ type: 'text', text: JSON.stringify(relatedArtists, null, 2) }],
             };
