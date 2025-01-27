@@ -90,6 +90,11 @@ interface ArtistRelatedArtistsArgs {
   id: string;
 }
 
+interface AudiobookArgs {
+  id: string;
+  market?: string;
+}
+
 class SpotifyServer {
   private server: Server;
   private tokenInfo: TokenInfo | null = null;
@@ -445,6 +450,24 @@ class SpotifyServer {
               id: {
                 type: 'string',
                 description: 'The Spotify ID or URI for the artist'
+              }
+            },
+            required: ['id']
+          },
+        },
+        {
+          name: 'get_audiobook',
+          description: 'Get Spotify catalog information for an audiobook',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+                description: 'The Spotify ID or URI for the audiobook'
+              },
+              market: {
+                type: 'string',
+                description: 'Optional. An ISO 3166-1 alpha-2 country code'
               }
             },
             required: ['id']
@@ -850,6 +873,39 @@ class SpotifyServer {
             const albums = await this.makeApiRequest(`/artists/${artistId}/albums?${params.toString()}`);
             return {
               content: [{ type: 'text', text: JSON.stringify(albums, null, 2) }],
+            };
+          }
+
+          case 'get_audiobook': {
+            if (!request.params.arguments || typeof request.params.arguments.id !== 'string') {
+              throw new McpError(
+                ErrorCode.InvalidParams,
+                'Invalid arguments. Required: id (string)'
+              );
+            }
+
+            const args: AudiobookArgs = {
+              id: request.params.arguments.id,
+              market: typeof request.params.arguments.market === 'string' ? 
+                request.params.arguments.market : undefined
+            };
+
+            const { id, market } = args;
+
+            // Extract ID from URI if provided
+            const audiobookId = id.startsWith('spotify:audiobook:') ? id.split(':')[2] : id;
+
+            // Build query parameters
+            const params = new URLSearchParams();
+            if (market) {
+              params.set('market', market);
+            }
+
+            const audiobook = await this.makeApiRequest(
+              `/audiobooks/${audiobookId}${market ? `?${params.toString()}` : ''}`
+            );
+            return {
+              content: [{ type: 'text', text: JSON.stringify(audiobook, null, 2) }],
             };
           }
 
