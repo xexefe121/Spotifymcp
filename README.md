@@ -43,7 +43,8 @@ You'll need to provide your Spotify API credentials:
 - Access new releases and recommendations
 - Get audiobook information with market-specific content and chapters
 - Note: Audiobook endpoints may require additional authentication or market-specific access
-- Get and modify playlist information with tracks and items
+- Get and modify playlist information (name, description, public/private status)
+- Access playlist tracks and items with pagination support
 - Support for both Spotify IDs and URIs
 - Automatic token management with client credentials flow
 
@@ -66,7 +67,7 @@ You'll need to provide your Spotify API credentials:
 - `get_playlist`: Get a playlist owned by a Spotify user
 - `get_playlist_tracks`: Get full details of the tracks of a playlist (1-100 tracks per request)
 - `get_playlist_items`: Get full details of the items of a playlist (1-100 items per request)
-- `modify_playlist`: Change a playlist's name, description, and public/private state
+- `modify_playlist`: Change playlist details (name, description, public/private state, collaborative status)
 
 ## License
 
