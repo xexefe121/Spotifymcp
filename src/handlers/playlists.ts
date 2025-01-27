@@ -1,5 +1,5 @@
 import { SpotifyApi } from '../utils/api.js';
-import { PlaylistArgs, PlaylistTracksArgs, PlaylistItemsArgs, ModifyPlaylistArgs, AddTracksToPlaylistArgs, RemoveTracksFromPlaylistArgs } from '../types/playlists.js';
+import { PlaylistArgs, PlaylistTracksArgs, PlaylistItemsArgs, ModifyPlaylistArgs, AddTracksToPlaylistArgs, RemoveTracksFromPlaylistArgs, GetCurrentUserPlaylistsArgs } from '../types/playlists.js';
 import { McpError, ErrorCode } from '@modelcontextprotocol/sdk/types.js';
 
 export class PlaylistsHandler {
@@ -98,6 +98,19 @@ export class PlaylistsHandler {
       `/playlists/${playlistId}/tracks`,
       'DELETE',
       data
+    );
+  }
+
+  async getCurrentUserPlaylists(args: GetCurrentUserPlaylistsArgs) {
+    const { limit, offset } = args;
+
+    const params = {
+      ...(limit !== undefined && { limit }),
+      ...(offset !== undefined && { offset })
+    };
+
+    return this.api.makeRequest(
+      `/me/playlists${this.api.buildQueryString(params)}`
     );
   }
 }

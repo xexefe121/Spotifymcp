@@ -70,6 +70,7 @@ You'll need to provide your Spotify API credentials:
 - `modify_playlist`: Change playlist details (name, description, public/private state, collaborative status)
 - `add_tracks_to_playlist`: Add one or more tracks to a playlist with optional position
 - `remove_tracks_from_playlist`: Remove one or more tracks from a playlist with optional positions and snapshot ID
+- `get_current_user_playlists`: Get a list of the playlists owned or followed by the current Spotify user (1-50 playlists per request)
 
 ## License
 

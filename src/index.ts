@@ -35,7 +35,7 @@ import {
   SearchArgs,
 } from './types/tracks.js';
 import { AudiobookArgs, MultipleAudiobooksArgs, AudiobookChaptersArgs } from './types/audiobooks.js';
-import { PlaylistArgs, PlaylistTracksArgs, PlaylistItemsArgs, ModifyPlaylistArgs, AddTracksToPlaylistArgs, RemoveTracksFromPlaylistArgs } from './types/playlists.js';
+import { PlaylistArgs, PlaylistTracksArgs, PlaylistItemsArgs, ModifyPlaylistArgs, AddTracksToPlaylistArgs, RemoveTracksFromPlaylistArgs, GetCurrentUserPlaylistsArgs } from './types/playlists.js';
 
 class SpotifyServer {
   private validateArgs<T>(args: Record<string, unknown> | undefined, requiredFields: string[]): T {
@@ -71,7 +71,7 @@ class SpotifyServer {
     this.server = new Server(
       {
         name: 'mcp-spotify',
-        version: '0.4.3',
+        version: '0.4.4',
       },
       {
         capabilities: {
@@ -613,6 +613,26 @@ class SpotifyServer {
             },
             required: ['id', 'tracks']
           },
+        },
+        {
+          name: 'get_current_user_playlists',
+          description: 'Get a list of the playlists owned or followed by the current Spotify user',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              limit: {
+                type: 'number',
+                description: 'Maximum number of playlists to return (1-50)',
+                minimum: 1,
+                maximum: 50
+              },
+              offset: {
+                type: 'number',
+                description: 'The index of the first playlist to return',
+                minimum: 0
+              }
+            }
+          },
         }
       ],
     }));
@@ -797,6 +817,14 @@ class SpotifyServer {
           case 'remove_tracks_from_playlist': {
             const args = this.validateArgs<RemoveTracksFromPlaylistArgs>(request.params.arguments, ['id', 'tracks']);
             const result = await this.playlistsHandler.removeTracksFromPlaylist(args);
+            return {
+              content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+            };
+          }
+
+          case 'get_current_user_playlists': {
+            const args = this.validateArgs<GetCurrentUserPlaylistsArgs>(request.params.arguments || {}, []);
+            const result = await this.playlistsHandler.getCurrentUserPlaylists(args);
             return {
               content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
             };

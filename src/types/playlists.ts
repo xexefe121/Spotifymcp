@@ -36,3 +36,8 @@ export interface RemoveTracksFromPlaylistArgs {
   }>;
   snapshot_id?: string;
 }
+
+export interface GetCurrentUserPlaylistsArgs extends PaginationParams {
+  limit?: number;
+  offset?: number;
+}
