@@ -35,7 +35,7 @@ import {
   SearchArgs,
 } from './types/tracks.js';
 import { AudiobookArgs, MultipleAudiobooksArgs, AudiobookChaptersArgs } from './types/audiobooks.js';
-import { PlaylistArgs, PlaylistTracksArgs, PlaylistItemsArgs, ModifyPlaylistArgs, AddTracksToPlaylistArgs } from './types/playlists.js';
+import { PlaylistArgs, PlaylistTracksArgs, PlaylistItemsArgs, ModifyPlaylistArgs, AddTracksToPlaylistArgs, RemoveTracksFromPlaylistArgs } from './types/playlists.js';
 
 class SpotifyServer {
   private validateArgs<T>(args: Record<string, unknown> | undefined, requiredFields: string[]): T {
@@ -71,7 +71,7 @@ class SpotifyServer {
     this.server = new Server(
       {
         name: 'mcp-spotify',
-        version: '0.4.2',
+        version: '0.4.3',
       },
       {
         capabilities: {
@@ -574,6 +574,45 @@ class SpotifyServer {
             },
             required: ['id', 'uris']
           },
+        },
+        {
+          name: 'remove_tracks_from_playlist',
+          description: 'Remove one or more tracks from a playlist',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+                description: 'The Spotify ID or URI of the playlist'
+              },
+              tracks: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    uri: {
+                      type: 'string',
+                      description: 'Spotify URI of the track to remove'
+                    },
+                    positions: {
+                      type: 'array',
+                      items: {
+                        type: 'number'
+                      },
+                      description: 'Optional positions of the track to remove'
+                    }
+                  },
+                  required: ['uri']
+                },
+                description: 'Array of objects containing Spotify track URIs to remove'
+              },
+              snapshot_id: {
+                type: 'string',
+                description: 'Optional. The playlist\'s snapshot ID'
+              }
+            },
+            required: ['id', 'tracks']
+          },
         }
       ],
     }));
@@ -750,6 +789,14 @@ class SpotifyServer {
           case 'add_tracks_to_playlist': {
             const args = this.validateArgs<AddTracksToPlaylistArgs>(request.params.arguments, ['id', 'uris']);
             const result = await this.playlistsHandler.addTracksToPlaylist(args);
+            return {
+              content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+            };
+          }
+
+          case 'remove_tracks_from_playlist': {
+            const args = this.validateArgs<RemoveTracksFromPlaylistArgs>(request.params.arguments, ['id', 'tracks']);
+            const result = await this.playlistsHandler.removeTracksFromPlaylist(args);
             return {
               content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
             };

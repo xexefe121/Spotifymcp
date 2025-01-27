@@ -27,3 +27,12 @@ export interface AddTracksToPlaylistArgs {
   uris: string[];
   position?: number;
 }
+
+export interface RemoveTracksFromPlaylistArgs {
+  id: string;
+  tracks: Array<{
+    uri: string;
+    positions?: number[];
+  }>;
+  snapshot_id?: string;
+}

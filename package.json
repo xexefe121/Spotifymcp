@@ -1,6 +1,6 @@
 {
   "name": "@thomaswawra/server-spotify",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Spotify Web API MCP server for accessing music, artists, albums, and recommendations",
   "type": "module",
   "bin": {

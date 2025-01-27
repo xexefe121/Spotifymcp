@@ -1,5 +1,5 @@
 import { SpotifyApi } from '../utils/api.js';
-import { PlaylistArgs, PlaylistTracksArgs, PlaylistItemsArgs, ModifyPlaylistArgs, AddTracksToPlaylistArgs } from '../types/playlists.js';
+import { PlaylistArgs, PlaylistTracksArgs, PlaylistItemsArgs, ModifyPlaylistArgs, AddTracksToPlaylistArgs, RemoveTracksFromPlaylistArgs } from '../types/playlists.js';
 import { McpError, ErrorCode } from '@modelcontextprotocol/sdk/types.js';
 
 export class PlaylistsHandler {
@@ -81,6 +81,22 @@ export class PlaylistsHandler {
     return this.api.makeRequest(
       `/playlists/${playlistId}/tracks`,
       'POST',
+      data
+    );
+  }
+
+  async removeTracksFromPlaylist(args: RemoveTracksFromPlaylistArgs) {
+    const playlistId = this.extractPlaylistId(args.id);
+    const { tracks, snapshot_id } = args;
+
+    const data = {
+      tracks,
+      ...(snapshot_id !== undefined && { snapshot_id })
+    };
+
+    return this.api.makeRequest(
+      `/playlists/${playlistId}/tracks`,
+      'DELETE',
       data
     );
   }
