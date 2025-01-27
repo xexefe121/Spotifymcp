@@ -33,7 +33,7 @@ import {
   RecommendationsArgs,
   SearchArgs,
 } from './types/tracks.js';
-import { AudiobookArgs } from './types/audiobooks.js';
+import { AudiobookArgs, MultipleAudiobooksArgs, AudiobookChaptersArgs } from './types/audiobooks.js';
 
 class SpotifyServer {
   private validateArgs<T>(args: Record<string, unknown> | undefined, requiredFields: string[]): T {
@@ -383,6 +383,55 @@ class SpotifyServer {
             },
             required: ['id']
           },
+        },
+        {
+          name: 'get_multiple_audiobooks',
+          description: 'Get Spotify catalog information for multiple audiobooks',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              ids: {
+                type: 'array',
+                items: { type: 'string' },
+                description: 'Array of Spotify audiobook IDs or URIs (max 50)',
+                maxItems: 50
+              },
+              market: {
+                type: 'string',
+                description: 'Optional. An ISO 3166-1 alpha-2 country code'
+              }
+            },
+            required: ['ids']
+          },
+        },
+        {
+          name: 'get_audiobook_chapters',
+          description: 'Get Spotify catalog information about an audiobook\'s chapters',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+                description: 'The Spotify ID or URI for the audiobook'
+              },
+              market: {
+                type: 'string',
+                description: 'Optional. An ISO 3166-1 alpha-2 country code'
+              },
+              limit: {
+                type: 'number',
+                description: 'Maximum number of chapters to return (1-50)',
+                minimum: 1,
+                maximum: 50
+              },
+              offset: {
+                type: 'number',
+                description: 'The index of the first chapter to return',
+                minimum: 0
+              }
+            },
+            required: ['id']
+          },
         }
       ],
     }));
@@ -503,6 +552,22 @@ class SpotifyServer {
           case 'get_audiobook': {
             const args = this.validateArgs<AudiobookArgs>(request.params.arguments, ['id']);
             const result = await this.audiobooksHandler.getAudiobook(args);
+            return {
+              content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+            };
+          }
+
+          case 'get_multiple_audiobooks': {
+            const args = this.validateArgs<MultipleAudiobooksArgs>(request.params.arguments, ['ids']);
+            const result = await this.audiobooksHandler.getMultipleAudiobooks(args);
+            return {
+              content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+            };
+          }
+
+          case 'get_audiobook_chapters': {
+            const args = this.validateArgs<AudiobookChaptersArgs>(request.params.arguments, ['id']);
+            const result = await this.audiobooksHandler.getAudiobookChapters(args);
             return {
               content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
             };

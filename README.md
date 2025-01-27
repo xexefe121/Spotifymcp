@@ -41,7 +41,7 @@ You'll need to provide your Spotify API credentials:
 - Get artist information including top tracks and related artists
 - Get album information and tracks
 - Access new releases and recommendations
-- Get audiobook information with market-specific content
+- Get audiobook information with market-specific content and chapters
 - Support for both Spotify IDs and URIs
 - Automatic token management with client credentials flow
 
@@ -59,6 +59,8 @@ You'll need to provide your Spotify API credentials:
 - `get_new_releases`: Get new album releases
 - `get_recommendations`: Get track recommendations
 - `get_audiobook`: Get audiobook information with optional market parameter
+- `get_multiple_audiobooks`: Get information for multiple audiobooks
+- `get_audiobook_chapters`: Get chapters of an audiobook with pagination support
 
 ## License
 
