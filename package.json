@@ -1,5 +1,5 @@
 {
-  "name": "@modelcontextprotocol/server-spotify",
+  "name": "@thomaswawra/server-spotify",
   "version": "0.1.0",
   "description": "Spotify Web API MCP server for accessing music, artists, albums, and recommendations",
   "type": "module",
@@ -30,7 +30,7 @@
     "api",
     "modelcontextprotocol"
   ],
-  "author": "Your Name",
+  "author": "Thomas Wawra",
   "license": "MIT",
   "repository": {
     "type": "git",

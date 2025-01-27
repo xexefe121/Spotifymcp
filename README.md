@@ -5,7 +5,7 @@ A Model Context Protocol (MCP) server that provides access to the Spotify Web AP
 ## Installation
 
 ```bash
-npx -y @modelcontextprotocol/server-spotify
+npx -y @thomaswawra/server-spotify
 ```
 
 ## Configuration
@@ -17,7 +17,7 @@ Add to your MCP settings file (e.g., `claude_desktop_config.json` or `cline_mcp_
   "mcpServers": {
     "spotify": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-spotify"],
+      "args": ["-y", "@thomaswawra/server-spotify"],
       "env": {
         "SPOTIFY_CLIENT_ID": "your_client_id",
         "SPOTIFY_CLIENT_SECRET": "your_client_secret"
