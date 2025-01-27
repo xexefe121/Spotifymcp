@@ -8,6 +8,7 @@ A Model Context Protocol (MCP) server that provides access to the Spotify Web AP
 - Get artist information including top tracks and related artists
 - Get album information and tracks
 - Access new releases and recommendations
+- Get audiobook information with market-specific content
 - Support for both Spotify IDs and URIs
 - Automatic token management with client credentials flow
 
@@ -42,6 +43,7 @@ npm run build
 - `get_track`: Get track information
 - `get_new_releases`: Get new album releases
 - `get_recommendations`: Get track recommendations
+- `get_audiobook`: Get audiobook information with optional market parameter
 - And more...
 
 ## License
