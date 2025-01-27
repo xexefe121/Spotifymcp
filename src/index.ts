@@ -71,7 +71,7 @@ class SpotifyServer {
     this.server = new Server(
       {
         name: 'mcp-spotify',
-        version: '0.1.0',
+        version: '0.4.1',
       },
       {
         capabilities: {
