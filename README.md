@@ -1,126 +1,113 @@
-# MCP Spotify Server
+# Spotify MCP Server for Vibecoder
 
-A Model Context Protocol (MCP) server that provides access to the Spotify Web API. This server enables interaction with Spotify's music catalog, including searching for tracks, albums, and artists, as well as accessing artist-specific information like top tracks and related artists.
+This is a Model Context Protocol (MCP) server designed to integrate with AI assistants like Cline (within cline, cursor or other IDE). It provides access to the Spotify Web API for music data retrieval and includes tools for controlling the Spotify macOS desktop application via AppleScript.
+
+## Features
+
+*   **Spotify Web API Integration:**
+    *   Search for tracks, albums, artists, and playlists.
+    *   Retrieve detailed information about artists, albums, tracks, and audiobooks.
+    *   Access new releases and recommendations.
+    *   Manage user playlists (view, modify, add/remove tracks).
+    *   Handles API authentication using Client Credentials Flow.
+*   **macOS Playback Control:**
+    *   Control the Spotify desktop application running on macOS.
+    *   Play/pause, skip next/previous track.
+    *   Retrieve current track information.
+    *   Initiate playback of a specific track via its Spotify URI.
 
 ## Prerequisites
 
-1. Node.js (version 16 or higher)
-2. Spotify API Credentials:
-   - Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
-   - Create a new application
-   - Get your Client ID and Client Secret
+1.  **Node.js**: Version 16 or higher.
+2.  **macOS**: Required for the playback control features. API features work cross-platform.
+3.  **Spotify Desktop App (macOS)**: Must be installed and running for playback control tools to function.
+4.  **Spotify API Credentials**:
+    *   Register an application on the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
+    *   Obtain your **Client ID** and **Client Secret**.
 
 ## Installation
 
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/pashpashpash/mcp-spotify.git
-   cd mcp-spotify
-   ```
+1.  **Clone the Repository**:
+    ```bash
+    git clone https://github.com/xexefe121/Spotifymcp.git
+    cd Spotifymcp
+    ```
 
-2. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
+2.  **Install Dependencies**:
+    ```bash
+    npm install
+    ```
+    This installs necessary packages, including `node-osascript` for macOS control, and runs the initial build.
 
-3. **Build the Project**:
-   ```bash
-   npm run build
-   ```
+3.  **Build the Project** (Run if you modify the source code):
+    ```bash
+    npm run build
+    ```
 
 ## Configuration
 
-Add to your Claude Desktop configuration file:
-- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- Windows: `%APPDATA%/Claude/claude_desktop_config.json`
+Configure the server in your MCP client's settings file. For the Claude VS Code Extension on macOS, the path is typically:
+`/Users/shadmansian/Library/Application Support/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json`
+
+Add an entry within the `mcpServers` object:
 
 ```json
 {
   "mcpServers": {
-    "spotify": {
+    "spotify-vibecoder": { // Choose a unique server name
       "command": "node",
-      "args": ["path/to/mcp-spotify/dist/index.js"],
+      // *** Use the full, absolute path to the build output ***
+      "args": ["/full/path/to/your/Spotifymcp/build/index.js"],
       "env": {
-        "SPOTIFY_CLIENT_ID": "your_client_id",
-        "SPOTIFY_CLIENT_SECRET": "your_client_secret"
-      }
+        "SPOTIFY_CLIENT_ID": "YOUR_SPOTIFY_CLIENT_ID",
+        "SPOTIFY_CLIENT_SECRET": "YOUR_SPOTIFY_CLIENT_SECRET"
+      },
+      "disabled": false,
+      "autoApprove": [] // Optional: Add tool names to auto-approve
     }
+    // ... other server configurations ...
   }
 }
 ```
-Note: Replace "path/to/mcp-spotify" with the actual path to your cloned repository.
 
-## Features
+**Configuration Notes:**
 
-### Music Search and Discovery
-- Search for tracks, albums, artists, and playlists
-- Get artist information including top tracks and related artists
-- Get album information and tracks
-- Access new releases and recommendations
-
-### Audiobooks
-- Get audiobook information with market-specific content and chapters
-- Note: Audiobook endpoints may require additional authentication or market-specific access
-
-### Playlist Management
-- Get and modify playlist information (name, description, public/private status)
-- Access playlist tracks and items with pagination support
-- Add and remove tracks from playlists
-
-### Additional Features
-- Support for both Spotify IDs and URIs
-- Automatic token management with client credentials flow
+*   Replace `/full/path/to/your/Spotifymcp` with the **absolute path** to the cloned repository directory. Do not use relative paths or shell shortcuts like `~`.
+*   Replace `YOUR_SPOTIFY_CLIENT_ID` and `YOUR_SPOTIFY_CLIENT_SECRET` with your actual Spotify API credentials.
+*   Ensure the server name (e.g., `"spotify-vibecoder"`) is unique among your configured MCP servers.
 
 ## Available Tools
 
-### Authentication
-- `get_access_token`: Get a valid Spotify access token
+The server exposes the following tools to the connected AI assistant:
 
-### Search and Discovery
-- `search`: Search for tracks, albums, artists, or playlists
-- `get_new_releases`: Get new album releases
-- `get_recommendations`: Get track recommendations
+### Web API Tools
+*   `get_access_token`: Obtain an API access token.
+*   `search`: Search Spotify content.
+*   `get_artist`, `get_multiple_artists`, `get_artist_top_tracks`, `get_artist_related_artists`, `get_artist_albums`: Artist information retrieval.
+*   `get_album`, `get_multiple_albums`, `get_album_tracks`: Album information retrieval.
+*   `get_track`: Track information retrieval.
+*   `get_available_genres`: List available genre seeds.
+*   `get_new_releases`: Get new album releases.
+*   `get_recommendations`: Get track recommendations.
+*   `get_audiobook`, `get_multiple_audiobooks`, `get_audiobook_chapters`: Audiobook information retrieval.
+*   `get_playlist`, `get_playlist_tracks`, `get_playlist_items`, `modify_playlist`, `add_tracks_to_playlist`, `remove_tracks_from_playlist`, `get_current_user_playlists`: Playlist management.
 
-### Artist Information
-- `get_artist`: Get artist information
-- `get_artist_top_tracks`: Get an artist's top tracks
-- `get_artist_related_artists`: Get artists similar to a given artist
-- `get_artist_albums`: Get an artist's albums
+### macOS Playback Control Tools
+*   `spotify_play_pause`: Toggle playback.
+*   `spotify_next`: Skip to the next track.
+*   `spotify_previous`: Go to the previous track.
+*   `spotify_get_current_track`: Get details of the currently playing track.
+*   `spotify_play_track`: Play a specific track by its Spotify URI.
 
-### Album and Track Information
-- `get_album`: Get album information
-- `get_album_tracks`: Get an album's tracks
-- `get_track`: Get track information
+## Troubleshooting
 
-### Audiobook Access
-- `get_audiobook`: Get audiobook information with optional market parameter
-- `get_multiple_audiobooks`: Get information for multiple audiobooks (max 50)
-- `get_audiobook_chapters`: Get chapters of an audiobook with pagination support (1-50 chapters per request)
-
-### Playlist Management
-- `get_playlist`: Get a playlist owned by a Spotify user
-- `get_playlist_tracks`: Get full details of the tracks of a playlist (1-100 tracks per request)
-- `get_playlist_items`: Get full details of the items of a playlist (1-100 items per request)
-- `modify_playlist`: Change playlist details (name, description, public/private state, collaborative status)
-- `add_tracks_to_playlist`: Add one or more tracks to a playlist with optional position
-- `remove_tracks_from_playlist`: Remove one or more tracks from a playlist with optional positions and snapshot ID
-- `get_current_user_playlists`: Get a list of the playlists owned or followed by the current Spotify user (1-50 playlists per request)
-
-## Debugging
-
-If you run into issues, check Claude Desktop's MCP logs:
-```bash
-tail -n 20 -f ~/Library/Logs/Claude/mcp*.log
-```
-
-Common issues:
-1. **Authentication Errors**:
-   - Verify your Spotify Client ID and Secret are correct
-   - Check that your application is properly registered in the Spotify Developer Dashboard
-
-2. **Rate Limiting**:
-   - The server includes automatic token management
-   - Be aware of Spotify API rate limits for different endpoints
+*   **Check MCP Client Logs**: Consult the logs provided by your MCP client (e.g., Claude VS Code Extension logs) for specific error messages from the server.
+*   **API Errors**: Verify Client ID/Secret and ensure the application is active on the Spotify Developer Dashboard. Check for rate limiting.
+*   **macOS Control Errors**:
+    *   Confirm the Spotify desktop app is running.
+    *   Check macOS permissions: `System Settings > Privacy & Security > Automation` and `Accessibility`. Your terminal, VS Code, or Node might need permission to control Spotify via Apple Events.
+    *   Double-check the absolute path configured in the `args` of your MCP settings.
+*   **Build Issues**: Ensure `npm run build` completed successfully after any code changes.
 
 ## Development
 
@@ -131,7 +118,7 @@ npm install
 # Build the project
 npm run build
 
-# Development with auto-rebuild
+# Run in development mode with auto-rebuild
 npm run watch
 ```
 
@@ -140,4 +127,5 @@ npm run watch
 MIT License
 
 ---
-Note: This is a fork of the [original mcp-spotify repository](https://github.com/superseoworld/mcp-spotify)
+Repository: [https://github.com/xexefe121/Spotifymcp](https://github.com/xexefe121/Spotifymcp)
+Based on work from `https://github.com/pashpashpash/mcp-spotify?tab=readme-ov-file` and `superseoworld/mcp-spotify`.
