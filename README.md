@@ -2,6 +2,10 @@
 
 This is a Model Context Protocol (MCP) server designed to integrate with AI assistants like Cline (within cline, cursor or other IDE). It provides access to the Spotify Web API for music data retrieval and includes tools for controlling the Spotify macOS desktop application via AppleScript.
 
+## Demo
+
+[Watch Demo Video on YouTube](https://youtu.be/kuyWUlQLR9c)
+
 ## Features
 
 *   **Spotify Web API Integration:**
