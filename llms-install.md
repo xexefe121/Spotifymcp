@@ -1,6 +1,6 @@
-# Spotifymcp AI Installation Guide (llms-install.md)
+# spotify_macos_mcp AI Installation Guide (llms-install.md)
 
-This document provides instructions for AI assistants (like Cline) to perform a one-click installation of the Spotifymcp server.
+This document provides instructions for AI assistants (like Cline) to perform a one-click installation of the spotify_macos_mcp server.
 
 ## End-User Prerequisites
 
@@ -15,11 +15,11 @@ Before installation, the AI assistant should confirm or inform the end-user abou
 
 ### Step 1: Clone Repository
 
-1.  Clone the `Spotifymcp` repository to a suitable local directory.
+1.  Clone the `spotify_macos_mcp` repository to a suitable local directory.
     ```bash
-    git clone https://github.com/xexefe121/Spotifymcp.git <target_directory>/Spotifymcp
+    git clone https://github.com/xexefe121/spotify_macos_mcp.git <target_directory>/spotify_macos_mcp
     ```
-2.  **Action**: Determine and record the absolute path to the cloned `<target_directory>/Spotifymcp`. Let's call this `CLONED_REPO_PATH`.
+2.  **Action**: Determine and record the absolute path to the cloned `<target_directory>/spotify_macos_mcp`. Let's call this `CLONED_REPO_PATH`.
 
 ### Step 2: Install Dependencies
 
@@ -44,10 +44,10 @@ Before installation, the AI assistant should confirm or inform the end-user abou
     *   For VS Code on macOS, this is typically: `~/Library/Application Support/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json`
     *   Adapt the path if a different Cline environment is detected.
 2.  **Action**: Read the content of this JSON file.
-3.  **Action**: Construct the new MCP server configuration entry. The server name should be `spotify-vibecoder`:
+3.  **Action**: Construct the new MCP server configuration entry. The server name should be `spotify_macos_mcp`:
     ```json
     {
-      "spotify-vibecoder": {
+      "spotify_macos_mcp": {
         "command": "node",
         "args": ["<CLONED_REPO_PATH>/build/index.js"],
         "env": {
@@ -60,15 +60,15 @@ Before installation, the AI assistant should confirm or inform the end-user abou
     }
     ```
     *   **Important**:
-        *   Replace `<CLONED_REPO_PATH>` with the actual absolute path recorded in Step 1 (e.g., `/Users/username/mcp_servers/Spotifymcp`).
+        *   Replace `<CLONED_REPO_PATH>` with the actual absolute path recorded in Step 1 (e.g., `/Users/username/mcp_servers/spotify_macos_mcp`).
         *   Replace `<USER_SPOTIFY_CLIENT_ID>` with the Client ID obtained in Step 3.
         *   Replace `<USER_SPOTIFY_CLIENT_SECRET>` with the Client Secret obtained in Step 3.
-4.  **Action**: Add this new `spotify-vibecoder` object as a key-value pair within the top-level `mcpServers` object in the parsed JSON settings. Ensure existing configurations are preserved.
+4.  **Action**: Add this new `spotify_macos_mcp` object as a key-value pair within the top-level `mcpServers` object in the parsed JSON settings. Ensure existing configurations are preserved.
 5.  **Action**: Write the modified JSON content back to the settings file.
 
 ### Step 5: Finalize Installation
 
-1.  **Action**: Inform the end-user that the Spotifymcp server installation is complete.
+1.  **Action**: Inform the end-user that the spotify_macos_mcp server installation is complete.
 2.  **Action**: Suggest that Cline might need to rescan MCP servers, or the IDE might need a restart, for the new tools to become available.
 3.  **Optional Verification**: Suggest the user can test the integration by asking Cline to use a Spotify command, for example: "Cline, what song is currently playing on Spotify?" (assuming Spotify is running and playing music on their Mac).
 

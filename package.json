@@ -1,5 +1,5 @@
 {
-  "name": "@thomaswawra/server-spotify",
+  "name": "spotify_macos_mcp",
   "version": "0.4.4",
   "description": "Spotify Web API MCP server for accessing music, artists, albums, and recommendations",
   "type": "module",
@@ -35,7 +35,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/superseoworld/mcp-spotify.git"
+    "url": "https://github.com/xexefe121/spotify_macos_mcp.git"
   },
   "publishConfig": {
     "access": "public"

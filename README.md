@@ -29,8 +29,8 @@ This is a Model Context Protocol (MCP) server designed to integrate with AI assi
 
 1.  **Clone the Repository**:
     ```bash
-    git clone https://github.com/xexefe121/Spotifymcp.git
-    cd Spotifymcp
+    git clone https://github.com/xexefe121/spotify_macos_mcp.git
+    cd spotify_macos_mcp
     ```
 
 2.  **Install Dependencies**:
@@ -54,10 +54,10 @@ Add an entry within the `mcpServers` object:
 ```json
 {
   "mcpServers": {
-    "spotify-vibecoder": { // Choose a unique server name
+    "spotify_macos_mcp": { // Choose a unique server name
       "command": "node",
       // *** Use the full, absolute path to the build output ***
-      "args": ["/full/path/to/your/Spotifymcp/build/index.js"],
+      "args": ["/full/path/to/your/spotify_macos_mcp/build/index.js"],
       "env": {
         "SPOTIFY_CLIENT_ID": "YOUR_SPOTIFY_CLIENT_ID",
         "SPOTIFY_CLIENT_SECRET": "YOUR_SPOTIFY_CLIENT_SECRET"
@@ -72,9 +72,9 @@ Add an entry within the `mcpServers` object:
 
 **Configuration Notes:**
 
-*   Replace `/full/path/to/your/Spotifymcp` with the **absolute path** to the cloned repository directory. Do not use relative paths or shell shortcuts like `~`.
+*   Replace `/full/path/to/your/spotify_macos_mcp` with the **absolute path** to the cloned repository directory. Do not use relative paths or shell shortcuts like `~`.
 *   Replace `YOUR_SPOTIFY_CLIENT_ID` and `YOUR_SPOTIFY_CLIENT_SECRET` with your actual Spotify API credentials.
-*   Ensure the server name (e.g., `"spotify-vibecoder"`) is unique among your configured MCP servers.
+*   Ensure the server name (e.g., `"spotify_macos_mcp"`) is unique among your configured MCP servers.
 
 ## Available Tools
 
@@ -127,5 +127,5 @@ npm run watch
 MIT License
 
 ---
-Repository: [https://github.com/xexefe121/Spotifymcp](https://github.com/xexefe121/Spotifymcp)
+Repository: [https://github.com/xexefe121/spotify_macos_mcp](https://github.com/xexefe121/spotify_macos_mcp)
 Based on work from `https://github.com/pashpashpash/mcp-spotify?tab=readme-ov-file` and `superseoworld/mcp-spotify`.
