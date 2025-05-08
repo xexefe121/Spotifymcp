@@ -4,7 +4,7 @@ This is a Model Context Protocol (MCP) server designed to integrate with AI assi
 
 ## Demo
 
-[Watch Demo Video on YouTube](https://youtu.be/kuyWUlQLR9c)
+[Watch Demo Video](assets/spotifymcp.mp4)
 
 ## Features
 
